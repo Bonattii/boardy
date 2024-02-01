@@ -19,7 +19,7 @@ interface BoardListProps {
 }
 
 export function BoardList({ orgId, query }: BoardListProps) {
-  const data = useQuery(api.boards.get, { orgId })
+  const data = useQuery(api.boards.get, { orgId, ...query })
 
   // Loading fase, cause if doesn't found it will be null
   if (data === undefined) {
