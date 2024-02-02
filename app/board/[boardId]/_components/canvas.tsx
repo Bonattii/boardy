@@ -2,7 +2,7 @@
 
 import { nanoid } from 'nanoid'
 import { LiveObject } from '@liveblocks/client'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 
 import {
   useCanRedo,
@@ -31,6 +31,8 @@ import {
   pointerEventToCanvasPoint,
   resizeBounds
 } from '@/lib/utils'
+import { useDeleteLayers } from '@/hooks/use-delete-layers'
+import { useDisableScrollBounce } from '@/hooks/use-disable-scroll-bounce'
 
 import { Path } from './path'
 import { Info } from './info'
@@ -100,6 +102,8 @@ export function Canvas({ boardId }: CanvasProps) {
     },
     [lastUsedColor]
   )
+
+  const deleteLayers = useDeleteLayers()
 
   const translateSelectedLayers = useMutation(
     ({ storage, self }, point: Point) => {
@@ -388,6 +392,35 @@ export function Canvas({ boardId }: CanvasProps) {
 
     return layerIdsToColorSelection
   }, [selections])
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      switch (e.key) {
+        // TODO: FIX BUG WITH WRITTEN TEXT
+        // case 'Backspace':
+        //   deleteLayers()
+        //   break
+        case 'z': {
+          if (e.ctrlKey || e.metaKey) {
+            if (e.shiftKey) {
+              history.redo()
+            } else {
+              history.undo()
+            }
+            break
+          }
+        }
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [deleteLayers, history])
+
+  useDisableScrollBounce()
 
   return (
     <main className="h-full w-full relative bg-neutral-100 touch-none">
