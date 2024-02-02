@@ -33,6 +33,7 @@ import { Toolbar } from './toolbar'
 import { Participants } from './participants'
 import { SelectionBox } from './selection-box'
 import { LayerPreview } from './layer-preview'
+import { SelectionTools } from './selection-tools'
 import { CursorsPresence } from './cursors-presence'
 
 interface CanvasProps {
@@ -281,6 +282,8 @@ export function Canvas({ boardId }: CanvasProps) {
         undo={history.undo}
         redo={history.redo}
       />
+
+      <SelectionTools camera={camera} setLastUsedColor={setLastUsedColor} />
 
       <svg
         onWheel={onWheel}

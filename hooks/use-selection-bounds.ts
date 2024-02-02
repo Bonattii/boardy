@@ -43,7 +43,7 @@ const boundingBox = (layers: Layer[]): XYWH | null => {
   }
 }
 
-export const useSelectionBounce = () => {
+export const useSelectionBounds = () => {
   const selection = useSelf((me) => me.presence.selection)
 
   return useStorage((root) => {

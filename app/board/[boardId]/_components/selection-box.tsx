@@ -4,7 +4,7 @@ import { memo } from 'react'
 
 import { LayerType, Side, XYWH } from '@/types/canvas'
 import { useSelf, useStorage } from '@/liveblocks.config'
-import { useSelectionBounce } from '@/hooks/use-selection-bounce'
+import { useSelectionBounds } from '@/hooks/use-selection-bounds'
 
 interface SelectionBoxProps {
   onResizeHandlePointerDown: (corner: Side, initialBounds: XYWH) => void
@@ -24,7 +24,7 @@ export const SelectionBox = memo(function ({
       soleLayerId && root.layers.get(soleLayerId)?.type !== LayerType.Path
   )
 
-  const bounds = useSelectionBounce()
+  const bounds = useSelectionBounds()
 
   if (!bounds) {
     return null
