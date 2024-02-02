@@ -130,3 +130,10 @@ export type CanvasState =
       initialBounce: XYWH
       corner: Side
     }
+
+export type Layer =
+  | RectangleLayer
+  | EllipseLayer
+  | PathLayer
+  | TextLayer
+  | NoteLayer
