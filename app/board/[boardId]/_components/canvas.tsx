@@ -73,7 +73,11 @@ export function Canvas({ boardId }: CanvasProps) {
         onPointerLeave={onPointerLeave}
         className="h-[100vh] w-[100vw]"
       >
-        <g>
+        <g
+          style={{
+            transform: `translate(${camera.x}px, ${camera.y}px)`
+          }}
+        >
           <CursorsPresence />
         </g>
       </svg>
