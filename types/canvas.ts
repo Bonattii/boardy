@@ -127,7 +127,7 @@ export type CanvasState =
     }
   | {
       mode: CanvasMode.Resizing
-      initialBounce: XYWH
+      initialBounds: XYWH
       corner: Side
     }
 
