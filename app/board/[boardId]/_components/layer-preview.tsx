@@ -2,9 +2,11 @@
 
 import { memo } from 'react'
 
+import { colorToCss } from '@/lib/utils'
 import { LayerType } from '@/types/canvas'
 import { useStorage } from '@/liveblocks.config'
 
+import { Path } from './path'
 import { Note } from './note'
 import { Text } from './text'
 import { Ellipse } from './ellipse'
@@ -28,6 +30,18 @@ export const LayerPreview = memo(function ({
   }
 
   switch (layer.type) {
+    case LayerType.Path:
+      return (
+        <Path
+          key={id}
+          x={layer.x}
+          y={layer.y}
+          fill={layer.fill ? colorToCss(layer.fill) : '#000'}
+          points={layer.points}
+          stroke={selectionColor}
+          onPointerDown={(e) => onLayerPointerDown(e, id)}
+        />
+      )
     case LayerType.Rectangle:
       return (
         <Rectangle
@@ -65,7 +79,7 @@ export const LayerPreview = memo(function ({
         />
       )
     default:
-      console.warn('Unknown layer type', layer.type)
+      console.warn('Unknown layer type')
       return null
   }
 })
