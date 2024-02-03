@@ -1,9 +1,13 @@
 'use client'
 
 import Image from 'next/image'
+import { useState } from 'react'
+import { useAction } from 'convex/react'
 import { Poppins } from 'next/font/google'
+import { useOrganization } from '@clerk/nextjs'
 
 import { cn } from '@/lib/utils'
+import { api } from '@/convex/_generated/api'
 import { Button } from '@/components/ui/button'
 import { useProModal } from '@/store/use-pro-modal'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
@@ -14,7 +18,27 @@ const font = Poppins({
 })
 
 export function ProModal() {
+  const [pending, setPending] = useState(false)
+
+  const pay = useAction(api.stripe.pay)
   const { isOpen, onClose } = useProModal()
+  const { organization } = useOrganization()
+
+  const onClick = async () => {
+    if (!organization?.id) {
+      return
+    }
+
+    setPending(true)
+
+    try {
+      const redirectUrl = await pay({ orgId: organization.id })
+
+      window.location.href = redirectUrl
+    } finally {
+      setPending(false)
+    }
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -40,7 +64,12 @@ export function ProModal() {
             </ul>
           </div>
 
-          <Button size="sm" className="w-full">
+          <Button
+            size="sm"
+            className="w-full"
+            onClick={onClick}
+            disabled={pending}
+          >
             Upgrade
           </Button>
         </div>
